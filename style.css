@@ -1243,6 +1243,201 @@ body {
     margin-bottom: 12px;
 }
 
+        transform: translateX(-12px);
+    }
+
+    40% {
+        transform: translateX(12px);
+    }
+
+    60% {
+        transform: translateX(-8px);
+    }
+
+    80% {
+        transform: translateX(8px);
+    }
+}
+
+.damage-flash {
+    animation: damageFlash 0.35s ease;
+}
+
+@keyframes damageFlash {
+
+    0%,
+    100% {
+        filter: none;
+    }
+
+    50% {
+        filter: brightness(2.5) saturate(0);
+    }
+}
+
+.damage-text {
+    position: fixed;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--hp-red);
+    text-shadow: 3px 3px 6px #000;
+    animation: flyUp 1s ease forwards;
+    pointer-events: none;
+    z-index: 100;
+}
+
+.heal-text {
+    color: var(--hp-green);
+}
+
+@keyframes flyUp {
+    from {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(-60px) scale(1.3);
+    }
+}
+
+/* ========== 弹窗 ========== */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: linear-gradient(180deg, #3a3a4a 0%, #2a2a3a 100%);
+    padding: 50px;
+    border-radius: 25px;
+    border: 3px solid var(--accent);
+    text-align: center;
+    min-width: 400px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+.modal-content h2 {
+    font-size: 2rem;
+    margin-bottom: 25px;
+    color: var(--gold);
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+}
+
+.modal-content.game-over h2 {
+    color: var(--hp-red);
+}
+
+.result-stats,
+.final-stats {
+    margin: 25px 0;
+    font-size: 1.2rem;
+    line-height: 2;
+}
+
+.modal-btn {
+    padding: 15px 50px;
+    font-size: 1.2rem;
+    background: linear-gradient(180deg, var(--accent) 0%, #c4384e 100%);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: all 0.3s;
+    box-shadow: 0 5px 20px rgba(233, 69, 96, 0.4);
+}
+
+.modal-btn:hover {
+    background: linear-gradient(180deg, var(--accent-light) 0%, var(--accent) 100%);
+    transform: scale(1.05);
+}
+
+/* 商店样式 */
+.shop-content {
+    min-width: 550px;
+}
+
+.shop-items {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 25px 0;
+}
+
+.shop-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid #444;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.shop-item:hover:not(.disabled) {
+    border-color: var(--gold);
+    background: rgba(255, 215, 0, 0.1);
+}
+
+.shop-item.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.shop-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* 休息样式 */
+.rest-content {
+    text-align: center;
+}
+
+.rest-options {
+    display: flex;
+    gap: 25px;
+    justify-content: center;
+    margin-top: 25px;
+}
+
+.rest-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 25px 35px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid #444;
+    border-radius: 18px;
+    cursor: pointer;
+    transition: all 0.3s;
+    color: var(--text-light);
+}
+
+.rest-btn:hover {
+    border-color: var(--gold);
+    background: rgba(255, 215, 0, 0.1);
+    transform: translateY(-5px);
+}
+
+.rest-icon {
+    font-size: 2.5rem;
+    margin-bottom: 12px;
+}
+
 .rest-desc {
     font-size: 0.95rem;
     color: var(--text-muted);
@@ -1277,5 +1472,189 @@ body {
     .portrait-display {
         width: 300px;
         height: 400px;
+    }
+}
+
+/* ========== 手机横屏专用适配 ========== */
+@media (max-height: 500px) and (orientation: landscape) {
+    /* 主菜单 */
+    .menu-content {
+        padding: 20px 40px;
+    }
+    
+    .game-title {
+        font-size: 2rem;
+        margin-bottom: 15px;
+        letter-spacing: 4px;
+    }
+    
+    .menu-list li {
+        font-size: 1rem;
+        padding: 10px 30px;
+        margin: 6px 0;
+    }
+    
+    /* 顶部状态栏 */
+    .game-header {
+        padding: 5px 15px;
+        font-size: 0.85rem;
+    }
+    
+    .icon-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 1rem;
+    }
+    
+    /* 战斗界面 */
+    .battle-content {
+        padding: 5px 10px;
+        gap: 10px;
+    }
+    
+    .player-area, .enemy-area {
+        width: 80px;
+    }
+    
+    .character-card {
+        width: 70px;
+        height: 90px;
+    }
+    
+    .character-card img {
+        height: 60px;
+    }
+    
+    /* 题目区域 */
+    .question-bubble-new {
+        padding: 12px 15px;
+        max-height: 40vh;
+        overflow-y: auto;
+        font-size: 0.85rem;
+    }
+    
+    .chapter-tag {
+        padding: 4px 12px;
+        font-size: 0.75rem;
+        margin-bottom: 8px;
+    }
+    
+    .question-content-wrapper {
+        line-height: 1.5;
+    }
+    
+    /* 卡牌区域 */
+    .cards-container-new {
+        gap: 8px;
+        padding: 5px;
+    }
+    
+    .card {
+        width: 80px;
+        height: 100px;
+        font-size: 0.7rem;
+    }
+    
+    .card-cost {
+        font-size: 0.8rem;
+        padding: 2px 5px;
+    }
+    
+    .card-name {
+        font-size: 0.75rem;
+    }
+    
+    .card-effect {
+        font-size: 0.65rem;
+    }
+    
+    /* 底部卡牌固定区 */
+    .cards-area-wrapper {
+        height: 110px;
+        padding: 5px;
+    }
+    
+    /* 结束回合按钮 */
+    .end-turn-btn, #end-turn-btn, button[onclick*="endTurn"] {
+        padding: 8px 20px;
+        font-size: 0.9rem;
+    }
+    
+    /* 涅奥事件 */
+    .neow-container {
+        padding: 10px;
+    }
+    
+    .neow-dialogue {
+        padding: 15px;
+    }
+    
+    .neow-text {
+        font-size: 0.9rem;
+    }
+    
+    .neow-choice {
+        padding: 10px 15px;
+        font-size: 0.85rem;
+        margin: 5px 0;
+    }
+    
+    /* 地图 */
+    .map-node {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+    }
+    
+    .map-legend {
+        font-size: 0.75rem;
+        padding: 8px;
+        gap: 15px;
+    }
+    
+    /* 模式选择 */
+    .mode-selection-container {
+        padding: 15px;
+    }
+    
+    .mode-panel {
+        padding: 15px;
+        min-height: auto;
+    }
+    
+    .mode-title {
+        font-size: 1.2rem;
+    }
+    
+    .mode-desc {
+        font-size: 0.8rem;
+    }
+}
+
+/* 更小的手机横屏（如iPhone SE横屏 568x320） */
+@media (max-height: 350px) and (orientation: landscape) {
+    .game-title {
+        font-size: 1.5rem;
+    }
+    
+    .menu-list li {
+        font-size: 0.9rem;
+        padding: 8px 20px;
+        margin: 4px 0;
+    }
+    
+    .question-bubble-new {
+        max-height: 35vh;
+        padding: 8px 12px;
+        font-size: 0.8rem;
+    }
+    
+    .card {
+        width: 65px;
+        height: 85px;
+    }
+    
+    .cards-area-wrapper {
+        height: 95px;
     }
 }
