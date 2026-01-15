@@ -1475,6 +1475,212 @@ body {
     }
 }
 
+/* ========== 手机竖屏适配 ========== */
+@media (max-width: 600px) {
+    body {
+        font-size: 14px;
+    }
+
+    /* 主菜单 */
+    #main-menu {
+        padding: 15px;
+    }
+
+    .menu-content {
+        width: 100%;
+        max-width: 360px;
+        padding: 28px 20px;
+    }
+
+    .game-title {
+        font-size: 2.2rem;
+        margin-bottom: 20px;
+        letter-spacing: 3px;
+    }
+
+    .menu-list li {
+        font-size: 1.1rem;
+        padding: 12px 20px;
+        margin: 8px 0;
+    }
+
+    /* 模式选择 */
+    #mode-selection {
+        padding: 20px;
+    }
+
+    .mode-header {
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 25px;
+    }
+
+    .mode-header h2 {
+        font-size: 1.8rem;
+    }
+
+    .mode-panels {
+        gap: 20px;
+    }
+
+    .mode-panel {
+        width: 100%;
+        max-width: 360px;
+        padding: 22px;
+    }
+
+    .mode-panel h3 {
+        font-size: 1.4rem;
+    }
+
+    .mode-panel p {
+        font-size: 0.95rem;
+    }
+
+    /* 角色选择 */
+    #character-selection {
+        padding: 15px;
+    }
+
+    .char-select-container {
+        padding: 18px;
+        gap: 18px;
+    }
+
+    .char-info-panel {
+        width: 100%;
+        padding: 20px;
+    }
+
+    .char-icons {
+        flex-direction: row;
+        gap: 15px;
+    }
+
+    .char-selector-panel {
+        width: 100%;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .portrait-display {
+        width: 240px;
+        height: 320px;
+    }
+
+    .embark-btn {
+        width: 100%;
+        max-width: 320px;
+    }
+
+    /* 涅奥事件 */
+    .neow-container {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .neow-dialogue {
+        max-width: 100%;
+        padding: 20px;
+    }
+
+    .neow-dialogue p {
+        font-size: 1.2rem;
+    }
+
+    .neow-character img {
+        max-height: 40vh;
+    }
+
+    /* 地图界面 */
+    .game-header {
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 10px 15px;
+    }
+
+    .header-center {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        font-size: 1.1rem;
+    }
+
+    .map-legend {
+        flex-wrap: wrap;
+        gap: 12px;
+        font-size: 0.9rem;
+    }
+
+    /* 战斗界面 */
+    .player-area,
+    .enemy-area {
+        width: 100%;
+    }
+
+    .question-bubble-new {
+        padding: 18px 20px;
+        max-width: 100%;
+    }
+
+    .question-bubble-new p {
+        font-size: 1rem;
+    }
+
+    .cards-container-new {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .card {
+        width: 110px;
+        height: 150px;
+    }
+
+    .end-turn-btn {
+        right: 15px;
+        bottom: 15px;
+        padding: 12px 26px;
+        font-size: 1rem;
+    }
+
+    /* 弹窗 */
+    .modal-content {
+        width: min(90vw, 420px);
+        min-width: auto;
+        padding: 30px 20px;
+    }
+
+    .shop-content {
+        min-width: auto;
+        width: 90vw;
+    }
+}
+
+@media (max-width: 480px) {
+    .game-title {
+        font-size: 1.9rem;
+        letter-spacing: 2px;
+    }
+
+    .mode-panel {
+        padding: 18px;
+    }
+
+    .char-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 2rem;
+    }
+
+    .card {
+        width: 95px;
+        height: 135px;
+    }
+}
+
 /* ========== 手机横屏专用适配 ========== */
 @media (max-height: 500px) and (orientation: landscape) {
     /* 主菜单 */
@@ -1516,12 +1722,12 @@ body {
         width: 80px;
     }
     
-    .character-card {
+    .character-sprite {
         width: 70px;
         height: 90px;
     }
     
-    .character-card img {
+    .character-sprite img {
         height: 60px;
     }
     
@@ -1555,17 +1761,18 @@ body {
         font-size: 0.7rem;
     }
     
-    .card-cost {
-        font-size: 0.8rem;
-        padding: 2px 5px;
-    }
-    
-    .card-name {
+    .card-header {
         font-size: 0.75rem;
+        padding: 6px;
     }
     
-    .card-effect {
+    .card-body {
         font-size: 0.65rem;
+        padding: 8px;
+    }
+    
+    .card-footer {
+        font-size: 0.6rem;
     }
     
     /* 底部卡牌固定区 */
@@ -1575,7 +1782,7 @@ body {
     }
     
     /* 结束回合按钮 */
-    .end-turn-btn, #end-turn-btn, button[onclick*="endTurn"] {
+    .end-turn-btn, #endTurnBtn, button[onclick*="endTurn"] {
         padding: 8px 20px;
         font-size: 0.9rem;
     }
@@ -1589,7 +1796,7 @@ body {
         padding: 15px;
     }
     
-    .neow-text {
+    #neow-text {
         font-size: 0.9rem;
     }
     
@@ -1613,7 +1820,7 @@ body {
     }
     
     /* 模式选择 */
-    .mode-selection-container {
+    #mode-selection {
         padding: 15px;
     }
     
@@ -1622,11 +1829,11 @@ body {
         min-height: auto;
     }
     
-    .mode-title {
+    .mode-panel h3 {
         font-size: 1.2rem;
     }
     
-    .mode-desc {
+    .mode-panel p {
         font-size: 0.8rem;
     }
 }
