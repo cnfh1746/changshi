@@ -1,0 +1,17 @@
+# Python缓存
+__pycache__/
+*.pyc
+
+# 开发工具脚本（生成数据用，部署不需要）
+*.py
+
+# 中间文件
+*.json
+ai提取填空.md
+ai提炼讲义.md
+
+# 备份
+备份/
+
+# Agent配置
+.agent/

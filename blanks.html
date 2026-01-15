@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>上岸冲刺 - 填空题背诵</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a28;
+            --text-primary: #ffffff;
+            --text-secondary: #9090a8;
+            --gradient-gold: linear-gradient(135deg, #f5af19 0%, #f12711 100%);
+            --gradient-purple: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --success: #10b981;
+            --error: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        .app-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .stats {
+            display: flex;
+            gap: 20px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--bg-secondary);
+            border-radius: 4px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-purple);
+            transition: width 0.3s ease;
+        }
+
+        .question-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .question-number {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .question-content {
+            font-size: 1.2rem;
+            line-height: 1.8;
+        }
+
+        .blank {
+            display: inline-block;
+            min-width: 80px;
+            border-bottom: 2px solid #667eea;
+            margin: 0 5px;
+            text-align: center;
+            color: #667eea;
+            font-weight: 700;
+        }
+
+        .blank.revealed {
+            color: #10b981;
+            border-color: #10b981;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: scale(1.02);
+        }
+
+        .btn-reveal {
+            background: var(--gradient-purple);
+            color: white;
+        }
+
+        .btn-correct {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-wrong {
+            background: var(--error);
+            color: white;
+        }
+
+        .btn-next {
+            background: var(--gradient-gold);
+            color: white;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="header">
+            <div class="logo">
+                <span>📚</span>
+                <span>填空题背诵</span>
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value" id="correctCount">0</div>
+                    <div class="stat-label">正确</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="totalCount">0/230</div>
+                    <div class="stat-label">进度</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-number" id="questionNumber">第 1 题</div>
+            <div class="question-content" id="questionContent"></div>
+        </div>
+
+        <div class="btn-container" id="revealBtns">
+            <button class="btn btn-reveal" onclick="revealAnswer()">显示答案</button>
+        </div>
+
+        <div class="btn-container hidden" id="judgeBtns">
+            <button class="btn btn-wrong" onclick="judge(false)">❌ 没记住</button>
+            <button class="btn btn-correct" onclick="judge(true)">✅ 记住了</button>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script>
+        const questions = questionsData.chapters[0].questions;
+        let currentIndex = 0;
+        let correctCount = 0;
+
+        function init() {
+            // 加载进度
+            const saved = localStorage.getItem('blanks_progress');
+            if (saved) {
+                const data = JSON.parse(saved);
+                currentIndex = data.currentIndex || 0;
+                correctCount = data.correctCount || 0;
+            }
+            renderQuestion();
+            updateStats();
+        }
+
+        function renderQuestion() {
+            if (currentIndex >= questions.length) {
+                document.getElementById('questionContent').innerHTML =
+                    '<div style="text-align:center;font-size:2rem;">🎉 恭喜完成所有题目！</div>';
+                document.getElementById('revealBtns').classList.add('hidden');
+                document.getElementById('judgeBtns').classList.add('hidden');
+                return;
+            }
+
+            const q = questions[currentIndex];
+            document.getElementById('questionNumber').textContent = `第 ${currentIndex + 1} / ${questions.length} 题`;
+
+            // 将 {{BLANK}} 替换为空位显示
+            let content = q.content.replace(/\{\{BLANK\}\}/g, '<span class="blank">???</span>');
+            document.getElementById('questionContent').innerHTML = content;
+
+            // 显示按钮状态
+            document.getElementById('revealBtns').classList.remove('hidden');
+            document.getElementById('judgeBtns').classList.add('hidden');
+        }
+
+        function revealAnswer() {
+            const q = questions[currentIndex];
+            const answers = Array.isArray(q.answer) ? q.answer : [q.answer];
+
+            let answerIndex = 0;
+            let content = q.content.replace(/\{\{BLANK\}\}/g, () => {
+                const ans = answers[answerIndex] || answers[0];
+                answerIndex++;
+                return `<span class="blank revealed">${ans}</span>`;
+            });
+
+            document.getElementById('questionContent').innerHTML = content;
+            document.getElementById('revealBtns').classList.add('hidden');
+            document.getElementById('judgeBtns').classList.remove('hidden');
+        }
+
+        function judge(correct) {
+            if (correct) {
+                correctCount++;
+            }
+            currentIndex++;
+            saveProgress();
+            renderQuestion();
+            updateStats();
+        }
+
+        function updateStats() {
+            document.getElementById('correctCount').textContent = correctCount;
+            document.getElementById('totalCount').textContent = `${currentIndex}/${questions.length}`;
+            const percent = (currentIndex / questions.length * 100).toFixed(1);
+            document.getElementById('progressFill').style.width = percent + '%';
+        }
+
+        function saveProgress() {
+            localStorage.setItem('blanks_progress', JSON.stringify({
+                currentIndex,
+                correctCount
+            }));
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

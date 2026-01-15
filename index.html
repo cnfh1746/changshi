@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🗼 背诵尖塔</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- 音效预加载 (可选) -->
+
+    <!-- 全局背景层 -->
+    <div id="game-background" class="game-bg"></div>
+
+    <!-- 1. 主菜单 (Main Menu) -->
+    <section id="main-menu" class="scene active">
+        <div class="menu-content">
+            <h1 class="game-title">背诵尖塔</h1>
+            <ul class="menu-list">
+                <li onclick="game.showModeSelect()">开始游戏</li>
+                <li class="disabled">图鉴大全 (开发中)</li>
+                <li class="disabled">统计内容 (开发中)</li>
+                <li class="disabled">设定 (开发中)</li>
+                <li class="disabled">退出</li>
+            </ul>
+        </div>
+        <div class="menu-character">
+            <!-- 之后放个休息的勇者图片 -->
+        </div>
+    </section>
+
+    <!-- 2. 模式选择 (Mode Selection) -->
+    <section id="mode-selection" class="scene">
+        <div class="mode-header">
+            <button class="back-btn" onclick="game.showMainMenu()">返回</button>
+            <h2>选择模式</h2>
+        </div>
+        <div class="mode-panels">
+            <div class="mode-panel standard" onclick="game.showCharacterSelect('standard')">
+                <div class="mode-icon">🗡️</div>
+                <h3>标准模式</h3>
+                <p>启程去屠戮这座高塔。</p>
+            </div>
+            <div class="mode-panel daily disabled">
+                <div class="mode-icon">📅</div>
+                <h3>每日挑战</h3>
+                <p>每天会有一次全新的挑战。</p>
+            </div>
+            <div class="mode-panel custom disabled">
+                <div class="mode-icon">🔒</div>
+                <h3>自定模式</h3>
+                <p>进行一局每日挑战来解锁。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. 角色选择 (Character Selection) -->
+    <section id="character-selection" class="scene">
+        <div class="char-select-container">
+            <div class="char-info-panel">
+                <h2 id="cs-name">铁甲战士</h2>
+                <div class="char-stats">
+                    <p>❤️ <span id="cs-hp">80</span>/80</p>
+                    <p>💰 <span id="cs-gold">99</span></p>
+                </div>
+                <p id="cs-desc" class="char-description">铁甲军团残留下的士兵。<br>他出卖了自己的灵魂，获得了恶魔的力量。</p>
+                <div class="char-relic">
+                    <span class="relic-icon">🎁</span>
+                    <span id="cs-relic">燃烧之血</span>
+                    <p id="cs-relic-desc">战斗结束时回复 6 点生命。</p>
+                </div>
+                <button class="back-btn" onclick="game.showModeSelect()">返回</button>
+            </div>
+
+            <div class="char-portrait-panel">
+                <div id="cs-portrait" class="portrait-display"></div>
+            </div>
+
+            <div class="char-selector-panel">
+                <div class="char-icons">
+                    <div class="char-icon selected" onclick="game.selectCharacter('scholar')">📚</div>
+                    <div class="char-icon" onclick="game.selectCharacter('warrior')">⚔️</div>
+                    <div class="char-icon" onclick="game.selectCharacter('mage')">🔮</div>
+                </div>
+                <button class="embark-btn" onclick="game.startGame()">启程</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. 涅奥事件 (Neow Event) -->
+    <section id="neow-event" class="scene">
+        <div class="neow-container">
+            <div class="neow-dialogue">
+                <p id="neow-text">又…… 来啦……</p>
+                <div class="neow-options" id="neow-options">
+                    <!-- 动态生成选项 -->
+                </div>
+            </div>
+            <div class="neow-character">
+                <img src="images/ui/neow.png" alt="涅奥">
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. 地图界面 (Map Screen) -->
+    <section id="map-screen" class="scene">
+        <header class="game-header">
+            <div class="header-left">
+                <button class="icon-btn">🗺️</button>
+                <button class="icon-btn">⚙️</button>
+            </div>
+            <div class="header-center">
+                <span class="header-name" id="top-name">勇者</span>
+                <span class="header-stat">❤️ <span id="top-hp">80</span>/<span id="top-max-hp">80</span></span>
+                <span class="header-stat">💰 <span id="top-gold">99</span></span>
+            </div>
+            <div class="header-right">
+                <span id="top-floor">第 1 层</span>
+            </div>
+        </header>
+
+        <div class="map-scroll-container">
+            <!-- SVG线层 -->
+            <svg id="map-connections"></svg>
+            <!-- 节点层 -->
+            <div id="map-nodes"></div>
+        </div>
+
+        <div class="map-legend">
+            <!-- 图例 -->
+            <div>⚔️ 敌人</div>
+            <div>🔥 休息</div>
+            <div>💰 宝箱</div>
+            <div>😈 精英</div>
+        </div>
+    </section>
+
+    <!-- 6. 战斗场景 (Battle Scene) - 复用并优化旧代码 -->
+    <main id="battle-scene" class="scene battle-scene-new">
+        <!-- 顶部栏复用 map-screen 的 header，这里用 JS 动态插入或复制 -->
+        <div id="battle-header-placeholder"></div>
+
+        <div class="battle-content">
+            <!-- 玩家区域 -->
+            <div class="player-area">
+                <div class="character-sprite" id="playerSprite">👤</div>
+                <div class="status-overlay">
+                    <div class="intent-bar"></div> <!-- 预留 -->
+                </div>
+            </div>
+
+            <!-- 题目/卡牌区域 -->
+            <div class="center-area">
+                <div class="question-bubble-new">
+                    <p id="questionText">问题加载中...</p>
+                </div>
+                <div class="cards-container-new" id="cardsContainer">
+                    <!-- 卡牌 -->
+                </div>
+                <div class="battle-log-new" id="battleLog"></div>
+            </div>
+
+            <!-- 敌人区域 -->
+            <div class="enemy-area">
+                <div class="character-sprite" id="enemySprite">📚</div>
+                <div class="enemy-intent-new" id="enemyIntent">
+                    <span id="intentValue">10</span> ⚔️
+                </div>
+                <!-- 血条 -->
+                <div class="hp-bar-new">
+                    <div class="hp-fill" id="enemyHpBar" style="width: 100%"></div>
+                    <span class="hp-text"><span id="enemyHp">30</span>/<span id="enemyMaxHp">30</span></span>
+                </div>
+            </div>
+        </div>
+
+        <button class="end-turn-btn" id="endTurnBtn" onclick="endPlayerTurn(false)">结束回合</button>
+    </main>
+
+    <!-- 弹窗部分保留但样式要改 -->
+    <div class="modal" id="resultModal">
+        <div class="modal-content">
+            <h2 id="resultTitle">战斗结果</h2>
+            <div class="result-stats" id="resultStats"></div>
+            <button class="modal-btn" id="continueBtn">继续</button>
+        </div>
+    </div>
+
+    <div class="modal" id="gameOverModal">
+        <div class="modal-content game-over">
+            <h2>💀 游戏结束</h2>
+            <div class="final-stats" id="finalStats"></div>
+            <button class="modal-btn" id="restartBtn">重新开始</button>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="game.js"></script>
+</body>
+
+</html>
